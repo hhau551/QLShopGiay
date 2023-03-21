@@ -1,0 +1,246 @@
+﻿@model ShopGiay.Models.Products
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- slide -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!-- Start breadcumb Area -->
+<section class="breadcrumb-login breadcrumb-details">
+    <div class="container">
+        <nav aria-label="breadcrumb ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Products">Sản phẩm</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Html.DisplayFor(model => model.ProductName)</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+<!-- End breadcumb Area -->
+<!--================Single Product Area =================-->
+<div class="product_image_area">
+    <div class="container">
+        <div class="row s_product_inner">
+            <div class="col-lg-6">
+                <div class="swiper mySwiper2 shadow-lg">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide p-5">
+                            <img src="~/images/Product/@Model.Image" />
+                        </div>
+                        <div class="swiper-slide p-5">
+                            <img src="~/images/Product/@Model.Image1" />
+                        </div>
+                        <div class="swiper-slide p-5">
+                            <img src="~/images/Product/@Model.Image2" />
+                        </div>
+                    </div>
+                    <div class="swiper-button-next swiper-button"></div>
+                    <div class="swiper-button-prev swiper-button"></div>
+                </div>
+                <div thumbsSlider="" class="swiper mySwiper">
+                    <div class="swiper-wrapper2 swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="~/images/Product/@Model.Image" />
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="~/images/Product/@Model.Image1" />
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="~/images/Product/@Model.Image2" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 offset-lg-1 details-prd">
+                <div class="s_product_text">
+                    <h3>@Html.DisplayFor(model => model.ProductName)</h3>
+                    <span class="product-custom-brand">
+                        <h4>Thương hiệu: <h5>@ViewBag.brdetails</h5></h4>
+                    </span>
+                    @if (Model.Sale > 0)
+                    {
+                        <div class="d-flex align-items-baseline">
+                            <h2>@string.Format("{0:0,0 VNĐ}", (Model.Price - Model.Sale))</h2>
+                            <h4 class="text-muted ml-4" style="text-decoration: line-through">@string.Format("{0:0,0 VNĐ}", Model.Price)</h4>
+                        </div>
+                    }
+                    else
+                    {
+                        <h2>@string.Format("{0:0,0 VNĐ}", Model.Price)</h2>
+                    }
+                    <p></p>
+                    <div class="size-wrap">
+                        <div class="block-26 slt-detail-product mb-5">
+                            <h4>Size</h4>
+                            <select class="nice-select" id="size">
+                                <option value="0">Chọn size:</option>
+                                @foreach (var item in ViewBag.prosz)
+                                {
+                                    if (item.ID == Model.ProductID)
+                                    {
+                                        foreach (var i in ViewBag.sz)
+                                        {
+                                            if (i.SizeID == item.IdSize)
+                                            {
+                                                <option value="@i.SizeID">@i.Size</option>
+                                            }
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+
+
+                        <div class="block-26-color mb-4">
+                            <h4>Màu sắc</h4>
+                            <ul class="d-flex product-details-color" id="chooseCL">
+                                @foreach (var item in ViewBag.procol)
+                                {
+                                    if (item.ID == Model.ProductID)
+                                    {
+                                        foreach (var i in ViewBag.col)
+                                        {
+                                            if (i.ColorID == item.ColorID)
+                                            {
+                                                <li>
+                                                    <input class="color-checkbox" type="radio" name="color" style="background-color: @i.Color;" value="@i.ColorID">
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                }
+                            </ul>
+                        </div>
+                        <div class="block-26-color product_count">
+                            <h4>Số lượng:</h4>
+                            <input type="number" id="quantity" min="1" max="99" value="1"
+                                   class="input-text qty">
+                        </div>
+                        <div class="card_area d-flex align-items-center">
+                            @if (!Model.Status)
+                            {
+                                <a class="primary-btn d-flex align-items-center justify-content-center" href="javascript:addCart(@Model.ProductID);">
+                                    <i class='bx bx-shopping-bag bx-sm'></i>&nbsp;&nbsp;
+                                    Thêm vào giỏ hàng
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="primary-btn custom-history-trash-disable" disabled="disabled">Thêm vào giỏ hàng</a>
+                            }
+                            <input type="text" class="d-none" id="myInput">
+                            <button onclick="Share()" title="Copy link" data-toggle="tooltip" onmouseout="outFunc()" class="btn-share  d-flex align-items-center justify-content-center">
+                                <i class='bx bx-share bx-rotate-180'></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--================End Single Product Area =================-->
+<!--================Product Description Area =================-->
+<section class="product_description_area"  data-aos="fade-up">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Mô tả</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <p>
+                    @Html.Raw(Model.Description)
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Product Description Area =================-->
+<!-- Start related-product Area -->
+
+<!-- End related-product Area -->
+<!-- slide -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        spaceBetween: 10,
+        slidesPerView: 4,
+        freeMode: true,
+        watchSlidesProgress: true,
+    });
+    var swiper2 = new Swiper(".mySwiper2", {
+        spaceBetween: 10,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        thumbs: {
+            swiper: swiper,
+        },
+    });
+
+    var x = location.href;
+    document.getElementById("myInput").value = x;
+
+    function addCart(id) {
+        $("#imgCart").attr("src", '/images/bagA.png');
+        $("#imgBusy_" + id).show();
+        var size = $("#size").val();
+        var color = $('input[name=color]:checked', '#chooseCL').val();
+        var quantity = $("#quantity").val();
+        setTimeout(function () {
+            $.ajax({
+                url: "/Home/AddCart",
+                type: "Post",
+                data: {
+                    id: id,
+                    size: size,
+                    color: color,
+                    quantity: quantity
+                },
+                success: function (result) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Thêm vào giỏ thành thành công!',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000)
+                },
+                error: function (e) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'Thêm vào giỏ thành thất bại!',
+                        showConfirmButton: true,
+                        timer: 1000
+                    })
+                }
+            })
+            $("#imgBusy_" + id).hide();
+        }, 500);
+    }
+
+    function Share() {
+        var copyText = document.getElementById("myInput");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+    }
+</script>

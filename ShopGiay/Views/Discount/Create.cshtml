@@ -1,0 +1,67 @@
+﻿@model ShopGiay.Models.Discounts
+
+@{
+    ViewData["Title"] = "Thêm mã giảm giá mới";
+}
+
+
+<div class="container modal-content container-modal-large">
+    <div class="modal-body p-5">
+        <div class="custom-icon pb-3 custom-header-modal">
+            <h2 class="main-title text-center text-uppercase mt-2 m-auto">Thêm mã giảm giá mới</h2>
+            <button type="button" class="close custom-btn-modal" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form asp-action="Create" class="form-edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="VoucherCode" class="control-label"></label>
+                <input asp-for="VoucherCode" class="form-control" />
+                <span asp-validation-for="VoucherCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DayStart" class="control-label"></label>
+                <input asp-for="DayStart" class="form-control" type="date" />
+                <span asp-validation-for="DayStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DayEnd" class="control-label"></label>
+                <input asp-for="DayEnd" class="form-control" type="date" />
+                <span asp-validation-for="DayEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateUse" class="control-label"></label>
+                <input asp-for="DateUse" class="form-control" type="date" />
+                <span asp-validation-for="DateUse" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display:none">
+                <label asp-for="CustomerId" class="control-label"></label>
+                <input asp-for="CustomerId" class="form-control" />
+                <span asp-validation-for="CustomerId" class="text-danger"></span>
+            </div>
+            <div class="form-group custom-checkbox">
+                <label class="control-label">Khóa mã</label>
+                <input class="form-checkbox-input ml-3" asp-for="Status" />
+            </div>
+            <div class="form-group custom-checkbox">
+                <label class="control-label">Giảm theo số tiền</label>
+                <input class="form-checkbox-input ml-3" asp-for="Classify" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Percent" class="control-label"></label>
+                <input min="0" max="100" asp-for="Percent" class="form-control" />
+                <span asp-validation-for="Percent" class="text-danger"></span>
+            </div>
+            <div class="text-center mt-3">
+                <input type="submit" value="Thêm mã mới" class="mt-2 col-lg-6 btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+

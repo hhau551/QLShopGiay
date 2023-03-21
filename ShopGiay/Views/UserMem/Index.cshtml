@@ -1,0 +1,152 @@
+﻿@model X.PagedList.IPagedList<ShopGiay.Models.Users>
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "ListUser";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+<div class="color-dashboard">
+    <h2 class="main-title text-center pt-4">DANH SÁCH KHÁCH HÀNG</h2>
+    <div class="col-lg-12 m-auto px-3 pb-4">
+        <div class="card shadow-sm">
+            <div class="card-body justify-content-around">
+                <div class="row col-lg-12">
+                    <div class="input-group col-lg-8 col-sm-6">
+                        <div class="form-outline d-flex">
+                            @using (Html.BeginForm("Index", "UserMem", FormMethod.Get))
+                            {
+                                <p class="d-flex">
+                                    <input class="pl-3" id="SearchString" name="SearchString" type="text" value="" placeholder="Nhập tên">
+                                    <button type="submit" value="Search" class="search-btn btn btn-primary">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </p>
+                            }
+                            <div class="ml-3">
+                                @using (Html.BeginForm("Index", "UserMem", FormMethod.Get))
+                                {
+                                    <div class="d-flex">
+                                        <select id="status" name="status">
+                                            <option value="">Chọn trạng thái</option>
+                                            <option value=False>Đang hoạt động</option>
+                                            <option value=True>Ngừng hoạt động</option>
+                                        </select>
+                                        <button type="submit" value="Search" class="search-btn btn btn-primary">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 m-auto px-3">
+        <div class="users-table table-wrapper">
+            <table class="posts-table mt-3">
+                <thead>
+                    <tr class="users-table-info">
+                        <th>
+                            Họ Tên
+                        </th>
+                        <th class="text-center">
+                            @Html.DisplayNameFor(model => model.First().Email)
+                        </th>
+                        <th class="text-center">
+                            <a href="@Url.ActionLink("Index", "UserMem", new { sortOrder = ViewBag.GenderSortParm  })">
+                                <span>Giới tính</span>
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th class="text-center">
+                            <a href="@Url.ActionLink("Index", "UserMem", new { sortOrder = ViewBag.PhoneSortParm  })">
+                                <span>SĐT</span>
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th class="text-center">
+                            <a href="@Url.ActionLink("Index", "UserMem", new { sortOrder = ViewBag.DobSortParm  })">
+                                <span>Ngày sinh</span>
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th class="text-center">
+                            @Html.DisplayNameFor(model => model.First().Address)
+                        </th>
+                        <th class="text-center">
+                            <a href="@Url.ActionLink("Index", "UserMem", new { sortOrder = ViewBag.LockSortParm  })">
+                                <span>Trạng thái</span>
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="col-lg-2">
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td class="col-lg-1">
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td class="col-lg-1 text-center">
+                                @if (item.Gender)
+                                {
+                                    <span>Nam</span>
+                                }
+                                else
+                                {
+                                    <span>Nữ</span>
+                                }
+                            </td>
+                            <td class="col-lg-1 text-center">
+                                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                            </td>
+                            <td class="col-lg-2 text-center">
+                                @Html.DisplayFor(modelItem => item.DOB)
+                            </td>
+                            <td class="col-lg-2">
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+                            <td class="col-lg-1 text-center">
+                                @Html.DisplayFor(modelItem => item.Lock)
+                            </td>
+                            <td class="col-lg-2">
+                                <a href="@Url.Action("Edit", "UserMem", new { id = @item.UserID })" class="btn-edit-usermem"><i class="far fa-edit dashbroad-icon-hover" style="font-size: 1.5rem;"></i></a>
+                                <a href="@Url.Action("Details", "UserMem", new { id = @item.UserID })" class="btn-details-usermem"><i class="far fa-eye ml-3 dashbroad-icon-hover" style="font-size: 1.5rem;"></i></a>
+                                <input type="hidden" class="id" value="@item.UserID " />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-12 m-auto px-3 pb-5">
+        <div class="pagin-admin shadow-sm">
+            Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilterSearch = ViewBag.CurrentFilterSearch, currentFilterStatus = ViewBag.CurrentFilterStatus }))
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Discount -->
+<div class="modal fade" id="editUserMemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- empty -->
+    </div>
+</div>
+
+<!-- Modal Details Discount -->
+<div class="modal fade" id="detailsUserMemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- empty -->
+    </div>
+</div>

@@ -1,0 +1,72 @@
+﻿@model ShopGiay.Models.Discounts
+
+
+<div class="container container-modal-large modal-content">
+    <div class="modal-body">
+        <div class="col-lg-12">
+            <div class="custom-detail pt-3">
+                <div class="custom-icon pb-3">
+                    <h4 class="main-title text-center text-uppercase mt-2 m-auto">Chi tiết mã giảm giá</h4>
+                    <button type="button" class="close custom-btn-modal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <dl class="shadow-lg">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.VoucherCode)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.VoucherCode)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.DayStart)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.DayStart)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.DayEnd)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.DayEnd)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.DateUse)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.DateUse)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.CustomerId)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.CustomerId)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Trạng thái
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Status)
+                    </dd>
+                    <dt class="col-sm-2"> 
+                        Giảm theo giá tiền
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Classify)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Price)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Price)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Percent)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Percent)%
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+

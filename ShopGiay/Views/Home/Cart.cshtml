@@ -1,0 +1,303 @@
+﻿@using ShopGiay.Models
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Extensions
+@using ShopGiay.Constant
+
+@model IEnumerable<ShopGiay.Models.ViewCart>;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ string emailAddress = Context.Session.GetString(SessionKey.Guest.Guest_UserName);}
+@{ string fullName = Context.Session.GetString(SessionKey.Guest.Guest_FullName);}
+@{ int checksz = 0; int checkcol = 0;}
+
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!-- Start breadcumb Area -->
+<section class="breadcrumb-login">
+    <div class="container">
+        <nav aria-label="breadcrumb ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+<!-- End breadcumb Area -->
+<!--================Cart Area =================-->
+<div class="colorlib-product">
+    <div class="container">
+        <div class="row row-pb-lg">
+            <div class="col-md-10 offset-md-1">
+                <div class="process-wrap">
+                    <div class="process text-center active">
+                        <p><span>01</span></p>
+                        <h3>Giỏ hàng</h3>
+                    </div>
+                    <div class="process text-center">
+                        <p><span>02</span></p>
+                        <h3>Thanh toán</h3>
+                    </div>
+                    <div class="process text-center">
+                        <p><span>03</span></p>
+                        <h3>Hoàn thành</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row row-pb-lg">
+            <div class="col-md-12">
+                <div class="cart-table table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="pro-quantity">STT</th>
+                                <th class="pro-thumbnail">Sản phẩm</th>
+                                <th class="pro-title">Tên</th>
+                                <th class="pro-quantity text-center">Size</th>
+                                <th class="pro-quantity text-center">Màu sắc</th>
+                                <th class="pro-quantity">Số lượng</th>
+                                <th class="pro-price">Giá</th>
+                                <th class="pro-subtotal">Tổng</th>
+                                <th class="pro-remove"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int stt = 0;
+                                double total = 0;
+                                foreach (var item in Model)
+                                {
+                                    int iD = @item.Products.ProductID;
+                                    string txt_Id = "txtQuantity_" + iD;
+                                    stt++;
+
+                                    double totalSub = 0;
+
+                                    if (item.Products.Sale > 0)
+                                    {
+                                        totalSub = (item.Products.Price - item.Products.Sale) * item.Quantity;
+                                    }
+                                    else
+                                    {
+                                        totalSub = item.Products.Price * item.Quantity;
+                                    }
+
+                                    total += totalSub;
+                                    <tr id="tr_@iD">
+                                        <td class="pro-quantity"><span>@stt</span></td>
+                                        <td class="pro-thumbnail">
+                                            <a href="#">
+                                                <img class="img-fluid img-cart-inx" src="~/images/Product/@item.Products.Image" alt="Product" />
+                                            </a>
+                                        </td>
+                                        <td class="pro-title custom-title-cart">
+                                            <a data-toggle="tooltip" 
+                                               title="@item.Products.ProductName" asp-action="Details" asp-route-id="Products"> @item.Products.ProductName</a>
+                                            </td>
+                                        <td class="pro-quantity text-center">
+                                            <select class="cart-tbl-select-custom ml-3 border-0" id="size_@iD">
+                                                @foreach (var i in ViewBag.sz)
+                                                {
+                                                    @if (item.Size == i.SizeID)
+                                                    {
+                                                        <option id="size_@iD" value="@i.SizeID">@i.Size</option>
+
+                                                        @foreach (var y in ViewBag.Prosz)
+                                                        {
+                                                            @if (item.Products.ProductID == y.ID)
+                                                            {
+                                                                @foreach (var ii in ViewBag.sz)
+                                                                {
+                                                                    @if (y.IdSize == ii.SizeID)
+                                                                    {
+                                                                        @if (y.IdSize != i.SizeID)
+                                                                        {
+                                                                            <option value="@y.IdSize">@ii.Size</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        checksz++;
+                                                    }
+                                                    if (item.Size == 0)
+                                                    {
+                                                        @foreach (var y in ViewBag.Prosz)
+                                                        {
+                                                            @if (item.Products.ProductID == y.ID)
+                                                            {
+                                                                @foreach (var ii in ViewBag.sz)
+                                                                {
+                                                                    @if (y.IdSize == ii.SizeID)
+                                                                    {
+                                                                        @if (y.IdSize != i.SizeID)
+                                                                        {
+                                                                            <option value="@y.IdSize">@ii.Size</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                        <td class="pro-quantity text-center">
+                                            <select class="cart-tbl-select-custom ml-4 border-0" id="color_@iD">
+                                                @foreach (var i in ViewBag.col)
+                                                {
+                                                    @if (item.Color == i.ColorID)
+                                                    {
+                                                        <option value="@i.ColorID">@i.Color</option>
+
+                                                        @foreach (var y in ViewBag.Procol)
+                                                        {
+                                                            @if (item.Products.ProductID == y.ID)
+                                                            {
+                                                                @foreach (var ii in ViewBag.col)
+                                                                {
+                                                                    @if (y.ColorID == ii.ColorID)
+                                                                    {
+                                                                        @if (y.ColorID != i.ColorID)
+                                                                        {
+                                                                            <option value="@y.ColorID">@ii.Color</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        checkcol++;
+                                                    }
+                                                    if (item.Color == 0)
+                                                    {
+                                                        @foreach (var y in ViewBag.Procol)
+                                                        {
+                                                            @if (item.Products.ProductID == y.ID)
+                                                            {
+                                                                @foreach (var ii in ViewBag.col)
+                                                                {
+                                                                    @if (y.ColorID == ii.ColorID)
+                                                                    {
+                                                                        @if (y.ColorID != i.ColorID)
+                                                                        {
+                                                                            <option value="@y.ColorID">@ii.Color</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                        <td class="pro-quantity">
+                                            <span>
+                                                <input name="sl" min="1" max="99" type="number" id="@txt_Id" onchange="updateCart(@iD)" value="@item.Quantity" />
+                                            </span>
+                                        </td>
+                                        @if (item.Products.Sale > 0)
+                                        {
+                                            <td class="pro-subtotal"><span id="tdGia_@iD">@String.Format("{0:n0}", (@item.Products.Price - item.Products.Sale))</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="pro-subtotal"><span id="tdGia_@iD">@String.Format("{0:n0}", @item.Products.Price)</span></td>
+                                        }
+                                        <td class="pro-price"><span id="tdTien_@iD">@String.Format("{0:n0}", @totalSub)</span></td>
+                                        <td class="pro-remove"><a href="javascript:delCart(@iD);"><i class='bx bx-x bx-sm'></i></a></td>
+                                    </tr>
+
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="stt" value="@stt" />
+        <div class="row row-pb-lg">
+            <div class="col-md-12">
+                <div class="total-wrap">
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-sm-5 text-center">
+                            <div class="total">
+                                <div class="grand-total mt-3">
+                                    <p><span><strong>Tổng tiền:</strong></span> <span id="spTotal">@String.Format("{0:n0}", @total) VNĐ</span></p>
+                                </div>
+                            </div>
+                            <div class="checkout_btn_inner mt-3">
+                                @if (fullName != null && fullName != "")
+                                {
+                                    <a class="primary-btn" asp-controller="Home" asp-action="Checkout">Tiến hành thanh toán</a>
+                                }
+                                else
+                                {
+                                    <a class="primary-btn" onclick="return false" asp-controller="Home" asp-action="Checkout">Tiến hành thanh toán</a>
+                                    <br/>
+                                    <span>Bạn cần <a class="text-danger" asp-action="Login">đăng nhập</a> để đặt hàng</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function clearCart() {
+        $("#imgCart").attr("src", '/images/bag.png');
+    }
+    function delCart(id) {
+        location.reload();
+        $.ajax({
+            type: "POST",
+            url: "/Home/DeleteCart",
+            data: {
+                id: id,
+            },
+            success: function (result) {
+                $("#tr_" + id).hide();
+                $("#spTotal").html(result);
+            }
+        });
+    }
+
+    function updateCart(id) {
+        var soluong = $("#txtQuantity_" + id).val();
+        var gia = $("#tdGia_" + id).html();
+        var thanhtien = soluong * gia;
+        var sizes = $("#size_" + id).val();
+        var colors = $("#color_" + id).val();
+
+        $("#tdTien_" + id).html(thanhtien);
+        location.reload();
+
+        $.ajax({
+            type: "POST",
+            url: "/Home/UpdateCart",
+            data: {
+                id: id,
+                soluong: soluong,
+                size: sizes,
+                color: colors
+            },
+            success: function (result) {
+                $("#spTotal").html(result);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,133 @@
+﻿@using ShopGiay.Models
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Extensions
+@using ShopGiay.Constant
+
+@model IEnumerable<ShopGiay.Models.ViewCart>;
+
+@{ string emailAddress = Context.Session.GetString(SessionKey.Guest.Guest_UserName);}
+@{ string fullName = Context.Session.GetString(SessionKey.Guest.Guest_FullName);
+}
+
+<div class="modal-content minicart-custom-content">
+    <div class="modal-body minicart-custom-body">
+        <!-- offcanvas mini cart start -->
+        <button type="button" class="close close-minicart minicart-close" data-dismiss="modal" aria-l
+                abel="Close"><span aria-hidden="true">&times;</span></button>
+        <div class="offcanvas-minicart-wrapper">
+            <div class="minicart-inner-box">
+                <div class="minicart-inner-content">
+                    <div class="minicart-content-box">
+                        @{
+                            int stt = 0;
+                            double total = 0;
+                            foreach (var item in Model)
+                            {
+                                int iD = @item.Products.ProductID;
+                                string txt_Id = "txtQuantity_" + iD;
+                                stt++;
+
+                                double totalSub = item.Products.Price * item.Quantity;
+                                total += totalSub;
+                                <div class="minicart-item-wrapper" id="tr_@iD">
+                                    <ul>
+
+                                        <li class="minicart-item">
+                                            <div class="minicart-thumb">
+                                                <a href="#">
+                                                    <img src="~/images/Product/@item.Products.Image" alt="product">
+                                                </a>
+                                            </div>
+                                            <div class="minicart-content">
+                                                <h3 class="product-name">
+                                                    <a>@item.Products.ProductName</a>
+                                                </h3>
+                                                <p>
+                                                    <input class="cart-quantity" name="sl" type="number" id="@txt_Id" onchange="updateCart(@iD)" value="@item.Quantity" disabled /> x
+                                                    <span class="cart-price" id="tdGia_@iD">@string.Format("{0:0,0 VNĐ}", (@item.Products.Price))</span>
+                                                </p>
+                                            </div>
+                                            <a class="minicart-remove" href="javascript:delCart(@iD);"><i class='bx bx-x'></i></a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                            }
+                        }
+
+                        <div class="minicart-pricing-box">
+                            <ul>
+                                <li class="total">
+                                    <span>Tổng</span>
+                                    <span id="spTotal">
+                                        <strong>
+                                            @if (@total == 0)
+                                            {
+                                                <span>0</span>
+                                            }
+                                            else
+                                            {
+                                                @string.Format("{0:0,0 VNĐ}", @total)
+                                            }
+                                        </strong>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="minicart-button">
+                            <div class="minicart-button-ct col-lg-12 mb-5">
+                                <a class="col-lg-6  d-flex align-items-center" asp-controller="Home" asp-action="Cart"><i class='bx bx-shopping-bag bx-sm'></i> Xem giỏ hàng</a>
+                                @if (fullName != null && fullName != "")
+                                {
+                                    <a class="col-lg-6 d-flex align-items-center" asp-controller="Home" asp-action="Checkout"><i class='bx bx-navigation bx-sm'></i> Thanh toán</a>
+                                }
+                                else
+                                {
+                                    <a class="col-lg-6 d-flex align-items-center" onclick="return false" asp-controller="Home" asp-action="Checkout"><i class='bx bx-navigation bx-sm'></i> Thanh toán</a>
+                                  
+                                    <span class="d-flex align-items-center text-minicart">Bạn cần 
+                                        &nbsp; 
+                                            <a class="text-danger text-lowercase text-custom-minicart" asp-action="Login">đăng nhập</a>
+                                        &nbsp; 
+                                        để đặt hàng
+                                           
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- offcanvas mini cart end -->
+    </div>
+</div>
+
+<script>
+    function clearCart() {
+        $("#imgCart").attr("src", '/images/bag.png');
+    }
+    function delCart(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Home/DeleteCart",
+            data: {
+                id: id,
+            },
+            success: function (result) {
+                $("#tr_" + id).hide();
+                $("#spTotal").html(result);
+
+                if (result == "0") {
+                    $("#imgCart").attr("src", '/images/bag.png');
+                }
+                else {
+                    $("#imgCart").attr("src", '/images/bagA.png');
+                }
+
+            }
+        });
+    }
+
+</script>

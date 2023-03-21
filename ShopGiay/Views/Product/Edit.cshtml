@@ -1,0 +1,125 @@
+﻿@model ShopGiay.Models.Products
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+<link rel="stylesheet" href="~/lib/multiple-select/multiple-select.min.css" />
+
+<div class="container">
+    <div class="col-lg-12 col-md-12 col-sm-12 custom-form mt-4 pb-5">
+        <div class="card flex-row shadow-lg">
+            <div class="card-body col-lg-12 col-md-12 col-sm-12">
+                <a asp-action="Index" class="dashbroad-icon-hover">
+                    <i class="icon-back fas fa-chevron-left fa-2x d-flex"></i>
+                </a>
+                <h2 class="main-title text-center text-uppercase mt-n3">Chỉnh sửa sản phẩm</h2>
+                <form class="form-edit" asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="ProductID" />
+                    <div class="form-group">
+                        <label asp-for="ProductName" class="control-label"></label>
+                        <input asp-for="ProductName" class="form-control" />
+                        <span asp-validation-for="ProductName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Sale" class="control-label"></label>
+                        <input asp-for="Sale" class="form-control" />
+                        <span asp-validation-for="Sale" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <img src="~/images/Product/@Model.Image" style="width:100px" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ImageFile" class="control-label"></label>
+                        <input asp-for="ImageFile" class="form-control" type="file" />
+                    </div>
+
+                    <div class="form-group" style="display:none">
+                        <label asp-for="Image" class="control-label"></label>
+                        <input asp-for="Image" class="form-control" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <img src="~/images/Product/@Model.Image1" style="width:100px" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ImageFile1" class="control-label"></label>
+                        <input asp-for="ImageFile1" class="form-control" type="file" />
+                    </div>
+                    <div class="form-group" style="display:none">
+                        <label asp-for="Image1" class="control-label"></label>
+                        <input asp-for="Image1" class="form-control" />
+                        <span asp-validation-for="Image1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <img src="~/images/Product/@Model.Image2" style="width:100px" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ImageFile2" class="control-label"></label>
+                        <input asp-for="ImageFile2" class="form-control" type="file" />
+                    </div>
+                    <div class="form-group" style="display:none">
+                        <label asp-for="Image2" class="control-label"></label>
+                        <input asp-for="Image2" class="form-control" />
+                        <span asp-validation-for="Image2" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BrandID" class="control-label"></label>
+                        <select asp-for="BrandID" class="form-control-select" asp-items="ViewBag.brands"></select>
+                        <span asp-validation-for="BrandID" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Chọn size</label>
+                        @Html.ListBox("selectedSize", ViewBag.categories,
+                            new { @class = "form-control-select form-custom-select", id = "selectedSize" })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Chọn màu</label>
+                        @Html.ListBox("selectedColor", ViewBag.color,
+                            new { @class = "form-control-select form-custom-select", id = "selectedColor" })
+                    </div>
+                    <div class="form-group form-check mt-3">
+                        <label class="form-check-label form-check-lbl">
+                            <input class="form-check-input form-custom-check" asp-for="Status" />
+                            <span class="form-check-input-span">@Html.DisplayNameFor(model => model.Status)</span>
+                        </label>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea id="txtDescriptionEdit" asp-for="Description" class="form-control-description form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="submit" value="Save" class="mt-2 col-lg-6 btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/multiple-select/multiple-select.min.js"></script>
+    <script>
+        $('#selectedSize').multipleSelect({
+            selectAll: false,
+            keepOpen: false,
+            isOpen: false
+        });
+    </script>
+    <script>
+        $('#selectedColor').multipleSelect({
+            selectAll: false,
+            keepOpen: false,
+            isOpen: false
+        });
+    </script>
+}

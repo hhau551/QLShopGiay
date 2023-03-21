@@ -1,0 +1,187 @@
+﻿@model IEnumerable<ShopGiay.Models.ViewDashBoard>;
+@{
+    ViewData["Title"] = "Welcome";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+<style>
+    .btn-gift-dob {
+        background: transparent;
+        color: #93a2eb;
+        font-weight: 700;
+    }
+        .btn-gift-dob:hover {
+            color: #3d57db;
+            background: transparent;
+        }
+</style>
+
+<main class="main users chart-page" id="skip-target">
+    <div class="container pt-3">
+        <div class="row stat-cards">
+            <div class="col-md-6 col-xl-3">
+                <article class="stat-cards-item">
+                    <div class="stat-cards-icon primary">
+                        <i class='bx bxs-component bx-sm bx-tada bx-rotate-90'></i>
+                    </div>
+                    <div class="stat-cards-info">
+                        <p class="stat-cards-info__num">@ViewBag.LsOrderDay</p>
+                        <p class="stat-cards-info__title">Đơn hàng mới</p>
+                        <p class="stat-cards-info__progress">
+                            <span class="stat-cards-info__profit success">
+                                <i class="fas fa-chart-line"></i> ?%
+                            </span>
+                            Ngày trước
+                        </p>
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="stat-cards-item">
+                    <div class="stat-cards-icon warning">
+                        <i class='bx bx-layer-plus bx-sm  bx-tada'></i>
+                    </div>
+                    <div class="stat-cards-info">
+                        <p class="stat-cards-info__num">@ViewBag.LsOrderM</p>
+                        <p class="stat-cards-info__title">Đơn hàng chưa xử lý</p>
+                        <p class="stat-cards-info__progress">
+                            <span class="stat-cards-info__profit danger">
+                                <i class="fas fa-chart-line-down"></i> ?%
+                            </span>
+                            Tổng đơn tháng trước
+                        </p>
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="stat-cards-item">
+                    <div class="stat-cards-icon purple">
+                        <i class='bx bx-user-plus bx-sm bx-tada'></i>
+                    </div>
+                    <div class="stat-cards-info">
+                        <p class="stat-cards-info__num">@ViewBag.LsOrderNb</p>
+                        <p class="stat-cards-info__title">Thành viên mới</p>
+                        <p class="stat-cards-info__progress">
+                            <span class="stat-cards-info__profit success">
+                                <i class="fas fa-chart-line"></i> ?%
+                            </span>
+                            Tháng trước
+                        </p>
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <article class="stat-cards-item">
+                    <div class="stat-cards-icon success">
+                        <i class='bx bx-cake bx-sm bx-tada' ></i>
+                    </div>
+                    <div class="stat-cards-info">
+                        <p class="stat-cards-info__num">@ViewBag.LsOrderDOB</p>
+                        <p class="stat-cards-info__title">Sinh nhật của khách</p>
+                        <p class="stat-cards-info__progress">
+                            <a class="btn-gift-dob" href="@Url.Action("GiftDoB", "Admin")">>> Gửi Voucher <<</a>
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="users-table users-table-ad-index table-wrapper">
+                    <table class="posts-table">
+                        <thead>
+                            <tr class="users-table-info">
+                                <th>
+                                    <label class="users-table__checkbox ms-20">
+                                        <input type="checkbox" class="check-all">Đơn gần nhất
+                                    </label>
+                                </th>
+                                <th>Khách hàng</th>
+                                <th>Ngày đặt</th>
+                                <th>Trạng thái</th>
+                                <th>Nội dung</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <label class="users-table__checkbox">
+                                            <input type="checkbox" class="check">
+                                            <div class="categories-table-img">
+                                                @item.Orders.OrderID
+                                            </div>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <div class="pages-table-img d-flex align-items-center">
+                                            <picture>
+                                                <img src="~/images/avatar/avatar-illustrated-02.png" alt="Người dùng">
+                                            </picture>
+                                            @item.Orders.FullName
+                                        </div>
+                                    </td>
+                                    <td>@item.Orders.DateCreate</td>
+                                    <td><span class="badge-pending">@item.Orders.Status</span></td>
+                                    <td>@item.Orders.Note</td>
+                                    <td>
+                                        <span class="p-relative">
+                                            <button class="dropdown-btn transparent-btn" type="button" title="More info">
+                                                <div class="sr-only">More info</div>
+                                                <i data-feather="more-horizontal" aria-hidden="true"></i>
+                                            </button>
+                                            <ul class="users-item-dropdown dropdown">
+                                                <li><a asp-controller="Orders" asp-action="Index">Xem danh sách</a></li>
+                                                <li><a href="@Url.Action("Edit", "Orders", new { id = @item.Orders.OrderID })" class="btn-edit-order">Chỉnh sửa</a></li>
+                                            </ul>
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Modal Edit Order -->
+            <div class="modal fade" id="editOrderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <!-- empty -->
+                </div>
+            </div>
+
+            <!-- Modal Gift DOB -->
+            <div class="modal fade" id="GiftDoBModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <!-- empty -->
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <article class="white-block">
+                    <div class="top-cat-title">
+                        <h3>Top ưa chuộng</h3>
+                        <p>Thương hiệu được ưa chuộng nhất:</p>
+                    </div>
+                    <ul class="top-cat-list">
+                        @foreach (var item in Model)
+                        {
+                            <li>
+                                <a href="#">
+                                    <div class="top-cat-list__title">
+                                        @item.BrandName <span>@item.Quantity</span>
+                                    </div>
+                                    <div class="top-cat-list__subtitle">
+                                        Trung bình hàng tháng<span class="purple">+??</span>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </article>
+            </div>
+        </div>
+    </div>
+</main>

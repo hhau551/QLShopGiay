@@ -1,0 +1,112 @@
+﻿@model ShopGiay.Models.Users
+@using ShopGiay.Constant
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Đổi mật khẩu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ string avatar = Context.Session.GetString(SessionKey.Guest.Guest_Avatar);}
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+<!-- Start breadcumb Area -->
+<section class="breadcrumb-login">
+    <div class="container">
+        <nav aria-label="breadcrumb ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-action="index">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Thông tin cá nhân</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+<!-- End breadcumb Area -->
+<!-- Infomation -->
+<section class="infomation-user pb-5 mb-5">
+    <div class="">
+        <div class="container">
+            <div class="row col-lg-12">
+                <div class="col-lg-4 infomation-user-left">
+                    <div class="infomation-user-left-img">
+                        @if (avatar == null || avatar == "")
+                        {
+                        <span class="img-info-user">
+                            <span class='bx bx-user'></span>
+                        </span>
+                        }
+                        else
+                        {
+                            <img alt='' src="~/images/avatar/@avatar" />
+                        }
+                        <span class="">
+                            @Html.DisplayFor(model => model.FullName)
+                        </span>
+                    </div>
+
+                    <ul class="nav flex-column infomation-user-left-nav">
+                        <li class="nav-link">
+                            <a asp-controller="Home" asp-action="InfoMenu">Tài khoản</a>
+                            <!-- empty -->
+                        </li>
+                        <li class="nav-link">
+                            <a asp-controller="Home" asp-action="Info">Thông tin</a>
+                        </li>
+                        <li class="nav-link">
+                            <a asp-controller="Home" asp-action="ChangePass" class="nav-info-active">Đổi mật khẩu</a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="col-lg-8 infomation-user-right">
+                    <div class="infomation-user-info col-lg-12">
+                        <div class="login_form_inner">
+                            @if (ViewData["Error"] != null)
+                            {
+                                <div class="red">
+                                    <p class="text-danger">@ViewData["Error"].ToString()</p>
+                                </div>
+                            }
+                            @if (TempData["Success"] != null)
+                            {
+                                <div class="green">
+                                    <p class="text-success">@TempData["Success"].ToString()</p>
+                                </div>
+                            }
+                            @*<div class="text-danger" asp-validation-summary="All"></div>*@
+                            <form asp-action="ChangePass" class="row changepass_form login_form" method="post" id="contactForm"
+                                  novalidate="novalidate">
+                                <div class="col-md-12 form-group d-none">
+                                    <input type="text" asp-for="UserName" id="username" class="form-control" readonly>
+                                </div>
+                                <div class="col-lg-12 form-group">
+                                    <input type="password" asp-for="ConfirmPassword" id="confirmpassword" class="form-control"
+                                           placeholder="Mật khẩu cũ">
+                                </div>
+                                <div class="col-lg-12 form-group">
+                                    <input type="password" asp-for="Password" id="password" class="form-control"
+                                           placeholder="Mật khẩu mới">
+                                </div>
+                                <div class="col-lg-12 form-group">
+                                    <input type="password" asp-for="Password" id="password" class="form-control"
+                                           placeholder="Xác nhận mật khẩu">
+                                </div>
+
+                                <div class="col-md-12 form-group mt-5">
+                                    <button type="submit" value="submit" class="primary-btn btnLogin">Đổi mật khẩu</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,195 @@
+﻿@model X.PagedList.IPagedList<ShopGiay.Models.Discounts>
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "ListUser";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+<style>
+    /* de o day*/
+    .users-table td {
+        border: none;
+    }
+</style>
+
+<div class="color-dashboard">
+    <h2 class="main-title text-center pt-4">DANH SÁCH MÃ GIẢM GIÁ</h2>
+    <div class="col-lg-12 m-auto px-3 pb-4">
+        <div class="card shadow-sm">
+            <div class="card-body justify-content-around">
+                <div class="row col-lg-12">
+                    <div class="input-group col-lg-8 col-sm-6">
+                        <div class="form-outline d-flex">
+                            @using (Html.BeginForm("Index", "Discount", FormMethod.Get))
+                            {
+                                <p class="d-flex">
+                                    <input class="pl-3" id="SearchString" name="SearchString" type="text" value="" placeholder="Tìm kiếm..">
+                                    <button type="submit" value="Search" class="search-btn btn btn-primary">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </p>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <a href="@Url.Action("Create", "Discount")" class="btn-create-discount color-btn-create btn btn-primary float-right">
+                            <i class="fas fa-plus pr-2"></i>
+                            Thêm mới
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 m-auto px-3">
+        <div class="users-table table-wrapper">
+            <table class="posts-table mt-3">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.First().VoucherCode)
+                        </th>
+                        <th class="text-center">
+                            <a href="@Url.ActionLink("Index", "Discount", new { sortOrder = ViewBag.DayStartSortParm })">
+                                <span>Bắt đầu</span>
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th class="text-center">
+                            <a href="@Url.ActionLink("Index", "Discount", new { sortOrder = ViewBag.DayEndSortParm })">
+                                <span>Kết thúc</span>
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th class="text-center">
+                            <a href="@Url.ActionLink("Index", "Discount", new { sortOrder = ViewBag.DateUseSortParm })">
+                                <span>HSD</span>
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th class="px-3">
+                            KH sử dụng
+                        </th>
+                        <th class="text-center">
+                            <a href="@Url.ActionLink("Index", "Discount", new { sortOrder = ViewBag.StatusSortParm })">
+                                <span>Trạng thái</span>
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th>
+                            <a href="@Url.ActionLink("Index", "Discount", new { sortOrder = ViewBag.PriceSortParm })">
+                                <span>Giảm $</span>
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th class="text-center">
+                            <a href="@Url.ActionLink("Index", "Discount", new { sortOrder = ViewBag.PercentSortParm })">
+                                <span>Giảm %</span>
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.VoucherCode)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.DayStart)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.DayEnd)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.DateUse)
+                            </td>
+                            <td class="px-3">
+                                @foreach (var u in ViewBag.user)
+                                {
+                                    if (u.UserID == item.CustomerId)
+                                    {
+                                        @u.FullName;
+                                    }
+                                }
+                            </td>
+                            <td class="text-center custom-checkbox-index">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td class="custom-checkbox-index d-flex justify-content-left">
+                                    @Html.DisplayFor(modelItem => item.Classify)
+                                <div class="ml-3">
+                                    @if (item.Price == 0)
+                                    {
+                                        <span>0</span>
+                                    }
+                                    else
+                                    {
+                                        @string.Format("{0:0,0 VNĐ}", item.Price)
+                                    }
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Percent)%
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Discount", new { id = @item.VoucherId })" class="btn-edit-discount">
+                                    <i class="far fa-edit dashbroad-icon-hover" style="font-size: 1.5rem;">
+                                    </i>
+                                </a>
+                                <a href="@Url.Action("Details", "Discount", new { id = @item.VoucherId })" class="btn-details-discount">
+                                    <i class="far fa-eye ml-3 dashbroad-icon-hover" style="font-size: 1.5rem;"></i>
+                                </a>
+                                <a href="@Url.Action("Delete", "Discount", new { id = @item.VoucherId })" class="btn-delete-discount">
+                                    <i class="far fa-trash-alt ml-3 dashbroad-icon-hover" style="font-size: 1.5rem;"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-12 m-auto px-3 pb-5">
+        <div class="pagin-admin shadow-sm">
+            <div class="pagin-left float-left">
+                Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+            </div>
+            <div class="pagin-right float-right">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.SortOrder, currentSearch = ViewBag.currentSearch }))
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Create Discount -->
+<div class="modal fade" id="createDiscountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- empty -->
+    </div>
+</div>
+
+<!-- Modal Edit Discount -->
+<div class="modal fade" id="editDiscountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- empty -->
+    </div>
+</div>
+
+<!-- Modal Details Discount -->
+<div class="modal fade" id="detailsDiscountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- empty -->
+    </div>
+</div>
+
+<!-- Modal Delete Discount -->
+<div class="modal fade" id="deleteDiscountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <!-- empty -->
+    </div>
+</div>

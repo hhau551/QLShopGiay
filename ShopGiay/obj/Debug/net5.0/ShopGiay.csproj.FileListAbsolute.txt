@@ -1,0 +1,9 @@
+D:\test\ShopGiay\ShopGiay\obj\Debug\net5.0\ShopGiay.csproj.AssemblyReference.cache
+D:\test\ShopGiay\ShopGiay\obj\Debug\net5.0\ShopGiay.GeneratedMSBuildEditorConfig.editorconfig
+D:\test\ShopGiay\ShopGiay\obj\Debug\net5.0\ShopGiay.AssemblyInfoInputs.cache
+D:\test\ShopGiay\ShopGiay\obj\Debug\net5.0\ShopGiay.AssemblyInfo.cs
+D:\test\ShopGiay\ShopGiay\obj\Debug\net5.0\ShopGiay.csproj.CoreCompileInputs.cache
+D:\test\ShopGiay\ShopGiay\obj\Debug\net5.0\ShopGiay.MvcApplicationPartsAssemblyInfo.cs
+D:\test\ShopGiay\ShopGiay\obj\Debug\net5.0\ShopGiay.MvcApplicationPartsAssemblyInfo.cache
+D:\test\ShopGiay\ShopGiay\obj\Debug\net5.0\ShopGiay.RazorAssemblyInfo.cache
+D:\test\ShopGiay\ShopGiay\obj\Debug\net5.0\ShopGiay.RazorAssemblyInfo.cs
